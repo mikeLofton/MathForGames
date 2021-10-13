@@ -168,5 +168,13 @@ namespace MathForGames
             _buffer[(int)position.X, (int)position.Y] = icon;
             return true;
         }
+
+        /// <summary>
+        /// Ends the application
+        /// </summary>
+        public static void CloseApplication()
+        {
+            _applicationShouldClose = true;
+        }
     }
 }
