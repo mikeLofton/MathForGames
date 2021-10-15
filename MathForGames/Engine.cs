@@ -42,7 +42,9 @@ namespace MathForGames
             Actor actor = new Actor('P', new MathLibrary.Vector2 { X = 0, Y = 0 }, "Actor1", ConsoleColor.Yellow);
             Actor actor2 = new Actor('A', new MathLibrary.Vector2 { X = 10, Y = 10 }, "Actor2", ConsoleColor.Green);
             Player player = new Player('@', 5, 5, 1, "Player", ConsoleColor.DarkMagenta);
+            UIText healthText = new UIText(20, 4, "Health", ConsoleColor.Cyan, 50, 10, "This is a test. \n All the text inside if this box is not important at all.");
 
+            scene.AddUIElement(healthText);
             scene.AddActor(actor);
             scene.AddActor(actor2);
             scene.AddActor(player);
@@ -60,6 +62,7 @@ namespace MathForGames
         private void Update()
         {
             _scenes[_currentSceneIndex].Update();
+            _scenes[_currentSceneIndex].UpdateUI();
 
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
@@ -78,6 +81,7 @@ namespace MathForGames
 
             //Adds all actor icons to buffer
             _scenes[_currentSceneIndex].Draw();
+            _scenes[_currentSceneIndex].DrawUI();
 
             //Iterate through buffer
             for (int y = 0; y < _buffer.GetLength(1); y++)
