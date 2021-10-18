@@ -62,13 +62,15 @@ namespace MathForGames
 
             Scene scene = new Scene();
             
-            Player player = new Player('@', 10, 10, 1, Color.DARKPURPLE, "Player");
+            Player player = new Player('@', 10, 10, 50, Color.DARKPURPLE, "Player");
+            Actor actor = new Actor('A', 5, 5, Color.RED, "Actor");
 
             //UI Section
             //UIText healthText = new UIText(20, 4, "Health", ConsoleColor.Cyan, 50, 10, "This is a test. \n All the text inside if this box is not important at all.");
             //scene.AddUIElement(healthText);
 
             scene.AddActor(player);
+            scene.AddActor(actor);
 
             _currentSceneIndex = AddScene(scene);
 
@@ -83,8 +85,7 @@ namespace MathForGames
         private void Update(float deltaTime)
         {
             _scenes[_currentSceneIndex].Update(deltaTime);
-            _scenes[_currentSceneIndex].UpdateUI(deltaTime);
-
+            
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
         }
