@@ -74,7 +74,7 @@ namespace MathForGames
         private void Draw()
         {
             //Clears the stuff that was on the screen in the last frame
-            _buffer = new Icon[Console.WindowWidth, Console.WindowHeight - 1];
+            _buffer = new Icon[Console.WindowWidth - 1, Console.WindowHeight - 1];
 
             //Reset the cursor position to the top so the previous screen is drawn over
             Console.SetCursorPosition(0, 0);
