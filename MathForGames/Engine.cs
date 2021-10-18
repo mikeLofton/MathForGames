@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using MathLibrary;
+using Raylib_cs;
 
 namespace MathForGames
 {
@@ -22,11 +23,10 @@ namespace MathForGames
             Start();
 
             //Loop until the application is told close
-            while (!_applicationShouldClose)
+            while (!_applicationShouldClose && !Raylib.WindowShouldClose())
             {
                 Update();
                 Draw();
-                Thread.Sleep(50);
             }
 
             //Call end for the entire application
@@ -38,15 +38,17 @@ namespace MathForGames
         /// </summary>
         private void Start()
         {
-            Scene scene = new Scene();
-            Actor actor = new Actor('P', new MathLibrary.Vector2 { X = 0, Y = 0 }, "Actor1", ConsoleColor.Yellow);
-            Actor actor2 = new Actor('A', new MathLibrary.Vector2 { X = 10, Y = 10 }, "Actor2", ConsoleColor.Green);
-            Player player = new Player('@', 5, 5, 1, "Player", ConsoleColor.DarkMagenta);
-            UIText healthText = new UIText(20, 4, "Health", ConsoleColor.Cyan, 50, 10, "This is a test. \n All the text inside if this box is not important at all.");
+            //Create a window using Raylib
+            Raylib.InitWindow(800, 450, "Math For Games");
 
-            scene.AddUIElement(healthText);
-            scene.AddActor(actor);
-            scene.AddActor(actor2);
+            Scene scene = new Scene();
+            
+            Player player = new Player('@', 10, 10, 1, Color.DARKPURPLE, "Player");
+
+            //UI Section
+            //UIText healthText = new UIText(20, 4, "Health", ConsoleColor.Cyan, 50, 10, "This is a test. \n All the text inside if this box is not important at all.");
+            //scene.AddUIElement(healthText);
+
             scene.AddActor(player);
 
             _currentSceneIndex = AddScene(scene);
@@ -73,36 +75,15 @@ namespace MathForGames
         /// </summary>
         private void Draw()
         {
-            //Clears the stuff that was on the screen in the last frame
-            _buffer = new Icon[Console.WindowWidth - 1, Console.WindowHeight - 1];
+            Raylib.BeginDrawing();
 
-            //Reset the cursor position to the top so the previous screen is drawn over
-            Console.SetCursorPosition(0, 0);
+            Raylib.ClearBackground(Color.BLACK);
 
             //Adds all actor icons to buffer
             _scenes[_currentSceneIndex].Draw();
             _scenes[_currentSceneIndex].DrawUI();
 
-            //Iterate through buffer
-            for (int y = 0; y < _buffer.GetLength(1); y++)
-            {
-                for (int x = 0; x < _buffer.GetLength(0); x++)
-                {
-                    if (_buffer[x, y].Symbol == '\0')
-                    {
-                        _buffer[x, y].Symbol = ' ';
-                    }
-
-                    //Set console text color to be color of item at buffer
-                    Console.ForegroundColor = _buffer[x, y].Color;
-                    //Print the symbol of the item in the buffer
-                    Console.Write(_buffer[x, y].Symbol);
-                }
-
-                //Skip a line once the end of a row had been reached
-                Console.WriteLine();
-            }
-
+            Raylib.EndDrawing();
         }
 
         /// <summary>
@@ -111,6 +92,7 @@ namespace MathForGames
         private void End()
         {
             _scenes[_currentSceneIndex].End();
+            Raylib.CloseWindow();
         }
 
         /// <summary>
@@ -152,25 +134,6 @@ namespace MathForGames
 
             //Return the current key being pressed
             return Console.ReadKey(true).Key;
-        }
-
-        /// <summary>
-        /// Adds the icon to the buffer to print to the screen in the next draw call.
-        /// Prints the icon at the given position in the buffer.
-        /// </summary>
-        /// <param name="icon">The icon to draw</param>
-        /// <param name="position">The position of the icon in the buffer</param>
-        /// <returns>False if the position is outside the bounds of the buffer</returns>
-        public static bool Render(Icon icon, Vector2 position)
-        {
-            //If the position is out of bounds...
-            if (position.X < 0 || position.X >= _buffer.GetLength(0) || position.Y < 0 || position.Y >= _buffer.GetLength(1))
-                //...return false
-                return false;
-
-            //Set the buffer at the index of the given postition to be the icon
-            _buffer[(int)position.X, (int)position.Y] = icon;
-            return true;
         }
 
         /// <summary>

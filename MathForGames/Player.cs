@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MathLibrary;
+using Raylib_cs;
 
 namespace MathForGames
 {
@@ -22,8 +23,8 @@ namespace MathForGames
             set { _velocity = value; }
         }
 
-        public Player(char icon, float x, float y, float speed, string name = "Actor", ConsoleColor color = ConsoleColor.White) : 
-            base(icon, x, y, name, color)
+        public Player(char icon, float x, float y, float speed, Color color, string name = "Actor") : 
+            base(icon, x, y, color, name)
         {
             _speed = speed;
         }
@@ -53,7 +54,7 @@ namespace MathForGames
 
         public override void OnCollision(Actor actor)
         {
-            Engine.CloseApplication();
+            //Engine.CloseApplication();
         }
     }
 }
